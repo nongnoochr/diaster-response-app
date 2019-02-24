@@ -1,5 +1,6 @@
-# Mac cache file
+# Dev artifacts
 .DS_Store
+.vscode
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

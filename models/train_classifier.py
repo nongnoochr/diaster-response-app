@@ -152,6 +152,20 @@ def build_model():
     model: GridsearchCV object.
     '''
 
+    ## This pipeline generate a model > 100MB which cannot be uploaded to github
+    ## Hence, use another pipeline to create the model instead
+    # pipeline = Pipeline([
+    #     ('vect', CountVectorizer(tokenizer=tokenize)),
+    #     ('tfidf', TfidfTransformer()),
+    #     ('clf', MultiOutputClassifier(RandomForestClassifier(random_state=1)))
+    # ])
+
+    # parameters = {
+    #     'vect__ngram_range': [(1, 1), (1, 2)],
+    #     'tfidf__use_idf': (True, False),
+    #     'clf__estimator__n_estimators': (20, 50),
+    # }
+
     pipeline = Pipeline([
         ('vect', CountVectorizer(tokenizer=tokenize)),
         ('tfidf', TfidfTransformer()),
@@ -160,8 +174,7 @@ def build_model():
 
     parameters = {
         'vect__ngram_range': [(1, 1), (1, 2)],
-        'tfidf__use_idf': (True, False),
-        'clf__estimator__n_estimators': (20, 50),
+        'clf__estimator__n_estimators': (10, 20),
     }
 
     model = GridSearchCV(pipeline, param_grid=parameters, cv=5)

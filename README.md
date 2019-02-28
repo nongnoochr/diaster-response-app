@@ -6,7 +6,7 @@ This project also contains python scripts that is used in the ETL (Extract, Tran
 
  
 
-### Installation
+## Installation
 Below are python libraries that are required to run this code using Python versions 3.*:
 
 * numpy
@@ -15,23 +15,31 @@ Below are python libraries that are required to run this code using Python versi
 * nltk
 * sklearn
 
-### Instructions:
+## Instructions:
 1. Run the following commands in the project's root directory to set up your database and model.
 
     - To run ETL pipeline that cleans data and stores in database <br />
 
         `python data/process_data.py data/disaster_messages.csv data/disaster_categories.csv data/DisasterResponse.db`
 
-    - To run ML pipeline that trains classifier and saves (This program can run quite long because it is also done GridSearch to find the best parameters in the provided list) <br />
+    - To run ML pipeline that trains classifier and saves () <br />
 
         `python models/train_classifier.py data/DisasterResponse.db models/classifier.pkl`
+
+        <p>
+        Note that:
+
+        1) the model is trained concurrently with the parameter n_jobs set to -1 (all CPUs are used)
+        2) random_state=1 is used to train the model to ensure that the same generated model will be the same.
+        3) This program can run quite long (hours) because it is also done GridSearch to find the best parameters in the provided list.
+        </p>
 
 2. Run the following command in the app's directory to run your web app. <br />
     `python run.py`
 
 3. Go to http://0.0.0.0:3001/
 
-### Licensing, Authors, Acknowledgements
+## Licensing, Authors, Acknowledgements
 
 Data files used in this project were from [Figure Eight](https://www.figure-eight.com/).
 You can find the Licensing for the data and other descriptive information there.

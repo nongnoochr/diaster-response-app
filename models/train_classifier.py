@@ -152,29 +152,27 @@ def build_model():
     model: GridsearchCV object.
     '''
 
-    ## This pipeline generate a model > 100MB which cannot be uploaded to github
-    ## Hence, use another pipeline to create the model instead
-    # pipeline = Pipeline([
-    #     ('vect', CountVectorizer(tokenizer=tokenize)),
-    #     ('tfidf', TfidfTransformer()),
-    #     ('clf', MultiOutputClassifier(RandomForestClassifier(random_state=1)))
-    # ])
+    pipeline = Pipeline([
+        ('vect', CountVectorizer(tokenizer=tokenize)),
+        ('tfidf', TfidfTransformer()),
+        ('clf', MultiOutputClassifier(RandomForestClassifier(random_state=1, n_jobs=-1)))
+    ])
+
+    ## It will take a very long time to use this parameters in GridSearchCV to generate a model
+    ## Hence, use a simpler parameters instead
 
     # parameters = {
     #     'vect__ngram_range': [(1, 1), (1, 2)],
     #     'tfidf__use_idf': (True, False),
-    #     'clf__estimator__n_estimators': (20, 50),
+    #     'clf__estimator__min_samples_leaf': [5, 10],
+    #     'clf__estimator__min_samples_split': [2, 5],
+    #     'clf__estimator__n_estimators': [20, 50],
     # }
 
-    pipeline = Pipeline([
-        ('vect', CountVectorizer(tokenizer=tokenize)),
-        ('tfidf', TfidfTransformer()),
-        ('clf', MultiOutputClassifier(RandomForestClassifier(random_state=1)))
-    ])
-
+    # Use a subset of parameters instead
     parameters = {
-        'vect__ngram_range': [(1, 1), (1, 2)],
-        'clf__estimator__n_estimators': (10, 20),
+        'clf__estimator__min_samples_leaf': [2, 5],
+        'clf__estimator__n_estimators': [10, 30],
     }
 
     model = GridSearchCV(pipeline, param_grid=parameters, cv=5)
@@ -253,4 +251,11 @@ def main():
 
 
 if __name__ == '__main__':
+
+    # This is required to prevent crash/freeze when fitting a model 
+    # with parallelize execution (n_jobs > 1) under OSX or Linux
+    # See a link below for more details:
+    # https://scikit-learn.org/stable/faq.html#why-do-i-sometime-get-a-crash-freeze-with-n-jobs-1-under-osx-or-linux
+    multiprocessing.set_start_method('forkserver')
+
     main()

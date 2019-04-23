@@ -15,6 +15,17 @@ Below are python libraries that are required to run this code using Python versi
 * nltk
 * sklearn
 
+IMPORTANT: For nltk, ensure that 'punkt' and 'wordnet' are downloaded before running the script/app
+
+```
+import nltk
+
+nltk.download('punkt')
+nltk.download('wordnet')
+
+```
+
+
 ## Instructions:
 1. Run the following commands in the project's root directory to set up your database and model.
 
